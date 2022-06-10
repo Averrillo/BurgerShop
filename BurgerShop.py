@@ -13,7 +13,8 @@ class FoodItem:
 
 class Burger(FoodItem):
     pass
-
+    condiment_list = []
+    condiment_menu = ['ketchup', 'mustard', 'mayo', 'onion', 'tomato', 'lettuce']
     burger_menu = {'original': 5.99, 'cheeseburger': 6.99, 'double cheeseburger': 8.99}
 
 
@@ -45,17 +46,34 @@ class Order:
             print(f'You ordered {i.number} {i.item_name}')
 
 
-
-
 def user_input_burger():
 
-    burger = input("What kind of burger would you like original, cheeseburger or double cheeseburger: ")
-    number = input("How many would you like")
+    count = 0
+    burger = input("What kind of burger would you like original, cheeseburger or double cheeseburger: ").lower()
+    number = input("How many would you like").lower()
     b = Burger(burger, number)
+    updated_condiment = b.condiment_menu
+    print(f'Please choose up to three condiments: ')
+
+    while count < 3:
+        for i in updated_condiment:
+            print(i)
+        condiment = input("Enter condiment or done: ").lower()
+        if condiment == 'done':
+            break
+        elif condiment not in updated_condiment:
+            print("Sorry not in condiment list")
+        else:
+            b.condiment_list.append(condiment)
+            updated_condiment.remove(condiment)
+            count += 1
+
     return b
 
 
 def user_input_drink():
+
+    drink = input()
     d = Drink()
     # ask user for input and store it in drink object
     return d
@@ -85,7 +103,7 @@ def take_order():
     order = Order(name)
     print(f'Hello {order.client_name} choose a menu you would like to order from')
 
-    while(is_true):
+    while is_true:
 
         menu_num = input('1. Burgers\n2. Drinks\n3. Sides\n4. Combo\n5. Exit\n')
         if menu_num == '1':
@@ -93,13 +111,16 @@ def take_order():
             order.order_list.append(o)
 
         elif menu_num == '2':
-            user_input_drink()
+            o = user_input_drink()
+            order.order_list.append(o)
 
         elif menu_num == '3':
-            user_input_side()
+            o = user_input_side()
+            order.order_list.append(o)
 
         elif menu_num == '4':
-            user_input_combo()
+            o = user_input_combo()
+            order.order_list.append(o)
 
         elif menu_num == '5':
             order.display_amount()
