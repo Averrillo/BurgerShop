@@ -1,9 +1,11 @@
 class FoodItem:
     pass
     item_name = ""
+    number = 0
 
-    def __init__(self, item_name):
+    def __init__(self, item_name, number):
         self.item_name = item_name
+        self.number = number
 
     def display(self):
         print(f"{self.item_name} added to order")
@@ -11,6 +13,7 @@ class FoodItem:
 
 class Burger(FoodItem):
     pass
+
     burger_menu = {'original': 5.99, 'cheeseburger': 6.99, 'double cheeseburger': 8.99}
 
 
@@ -31,19 +34,24 @@ class Combo(FoodItem):
 class Order:
     pass
     client_name = ""
-    order_details = []
+    order_list = []
     total_cost = 0
 
     def __init__(self, client_name):
         self.client_name = client_name
 
+    def display_amount(self):
+        for i in self.order_list:
+            print(f'You ordered {i.number} {i.item_name}')
+
+
+
 
 def user_input_burger():
 
     burger = input("What kind of burger would you like original, cheeseburger or double cheeseburger: ")
-    b = Burger(burger)
-    b.display()
-    # ask user for input and store it in burger object
+    number = input("How many would you like")
+    b = Burger(burger, number)
     return b
 
 
@@ -81,7 +89,8 @@ def take_order():
 
         menu_num = input('1. Burgers\n2. Drinks\n3. Sides\n4. Combo\n5. Exit\n')
         if menu_num == '1':
-            user_input_burger()
+            o = user_input_burger()
+            order.order_list.append(o)
 
         elif menu_num == '2':
             user_input_drink()
@@ -93,6 +102,7 @@ def take_order():
             user_input_combo()
 
         elif menu_num == '5':
+            order.display_amount()
             break
 
         else:
