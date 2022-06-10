@@ -32,6 +32,7 @@ class Order:
     pass
     client_name = ""
     order_details = []
+    total_cost = 0
 
     def __init__(self, client_name):
         self.client_name = client_name
@@ -70,12 +71,39 @@ def take_order():
     # repeat taking order until client is done
     # display order details
     # display a thank you message
+    is_true = True
     print("Welcome to Burger Shop")
     name = input("Can I get your name for the order: ")
     order = Order(name)
-    print(f'Hello {order.client_name} what would you like to ')
+    print(f'Hello {order.client_name} choose a menu you would like to order from')
 
-    order.order_details.append(user_input_burger())
+    while(is_true):
+
+        menu_num = input('1. Burgers\n2. Drinks\n3. Sides\n4. Combo\n5. Exit\n')
+        if menu_num == '1':
+            user_input_burger()
+
+        elif menu_num == '2':
+            user_input_drink()
+
+        elif menu_num == '3':
+            user_input_side()
+
+        elif menu_num == '4':
+            user_input_combo()
+
+        elif menu_num == '5':
+            break
+
+        else:
+            print("Please enter a valid number")
+
+
+
+
+
+
+
 
 
 
