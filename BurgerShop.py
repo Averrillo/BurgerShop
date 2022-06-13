@@ -19,6 +19,12 @@ class Burger(FoodItem):
     condiment_menu = ['ketchup', 'mustard', 'mayo', 'onion', 'tomato', 'lettuce']
     burger_menu = {'original': 5.99, 'cheeseburger': 6.99, 'double cheeseburger': 8.99}
     
+    def emptylist(self):
+        self.condiment_list = []
+
+    def getlist(self):
+        return self.condiment_list
+    
     
 
 
@@ -54,7 +60,11 @@ class Order:
 
     def display_amount(self):
         for i in self.order_list:
-            print(f'You ordered {i.number} {i.item_name}')
+            
+            if isinstance(i, Burger):
+                print(f'You ordered {i.number} {i.item_name} with condiments {i.condiment_menu}')
+            else:
+                print(f'You ordered {i.number} {i.item_name}')
             
     def display_total_cost(self):
         total_cost = 0
@@ -69,6 +79,7 @@ def user_input_burger():
     burger = input("What kind of burger would you like original, cheeseburger or double cheeseburger: ").lower()
     number = input("How many would you like ").lower()
     b = Burger(burger, number)
+    b.emptylist()
     
     b.cost = int(number) * b.burger_menu[burger]
     print(str(b.cost))
