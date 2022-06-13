@@ -1,3 +1,5 @@
+import copy
+
 class FoodItem:
     pass
     item_name = ""
@@ -11,11 +13,18 @@ class FoodItem:
         print(f"{self.item_name} added to order")
 
 
+
 class Burger(FoodItem):
-    pass
+
     condiment_list = []
     condiment_menu = ['ketchup', 'mustard', 'mayo', 'onion', 'tomato', 'lettuce']
     burger_menu = {'original': 5.99, 'cheeseburger': 6.99, 'double cheeseburger': 8.99}
+
+    def emptylist(self):
+        self.condiment_list = []
+
+    def getlist(self):
+        return self.condiment_list
 
 
 class Drink(FoodItem):
@@ -52,7 +61,9 @@ def user_input_burger():
     burger = input("What kind of burger would you like original, cheeseburger or double cheeseburger: ").lower()
     number = input("How many would you like").lower()
     b = Burger(burger, number)
-    updated_condiment = b.condiment_menu
+    b.emptylist()
+
+    updated_condiment = copy.deepcopy(b.condiment_menu)
     print(f'Please choose up to three condiments: ')
 
     while count < 3:
@@ -67,6 +78,8 @@ def user_input_burger():
             b.condiment_list.append(condiment)
             updated_condiment.remove(condiment)
             count += 1
+
+    print(b.condiment_list)
 
     return b
 
@@ -128,6 +141,9 @@ def take_order():
 
         else:
             print("Please enter a valid number")
+
+    for i in order.order_list:
+        print(i.getlist())
 
 
 
