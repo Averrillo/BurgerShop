@@ -71,6 +71,8 @@ class Order:
         for j in self.order_list:
             total_cost += j.cost
         print(f'Your total cost is {total_cost}')
+        
+    
             
 
 def user_input_burger():
