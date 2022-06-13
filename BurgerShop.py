@@ -1,7 +1,7 @@
 import copy
 
+
 class FoodItem:
-    pass
     item_name = ""
     number = 0
 
@@ -27,12 +27,10 @@ class Burger(FoodItem):
 
 
 class Drink(FoodItem):
-    pass
     drink_menu = {'small': 1.50, 'medium': 2, 'large': 3}
 
 
 class Side(FoodItem):
-    pass
     side_menu = {'fries': 2, 'onion rings': 3, 'poutine': 3.50}
 
 
@@ -41,7 +39,6 @@ class Combo(FoodItem):
 
 
 class Order:
-    pass
     client_name = ""
     order_list = []
     total_cost = 0
