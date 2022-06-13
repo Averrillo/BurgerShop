@@ -1,3 +1,5 @@
+import copy
+
 class FoodItem:
     pass
     item_name = ""
@@ -71,7 +73,7 @@ def user_input_burger():
     b.cost = int(number) * b.burger_menu[burger]
     print(str(b.cost))
     
-    updated_condiment = b.condiment_menu
+    updated_condiment = copy.deepcopy(b.condiment_menu)
     print(f'Please choose up to three condiments: ')
 
     while count < 3:
@@ -122,7 +124,7 @@ def user_input_combo():
     burger = Burger(burger_type, 1)
     burger.cost = burger.burger_menu[burger_type]
     
-    updated_condiment = burger.condiment_menu
+    updated_condiment = copy.deepcopy(burger.condiment_menu)
     print(f'Please choose up to three condiments: ')
 
     while count < 3:
@@ -150,7 +152,7 @@ def user_input_combo():
     combo_list = [burger, side, drink]
     
     c = Combo(burger, side, drink)
-    c.item_name = "combo"
+    c.item_name = f"Combo with {burger.item_name}, {side.item_name}, and {drink.item_name}"
     c.number = 1
     
     c.init_combo_cost = 0
