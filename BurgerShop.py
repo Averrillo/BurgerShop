@@ -62,7 +62,7 @@ class Order:
         for i in self.order_list:
             
             if isinstance(i, Burger):
-                print(f'You ordered {i.number} {i.item_name} with condiments {i.condiment_menu}')
+                print(f'You ordered {i.number} {i.item_name} with condiments {i.condiment_list}')
             else:
                 print(f'You ordered {i.number} {i.item_name}')
             
