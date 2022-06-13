@@ -13,14 +13,13 @@ class FoodItem:
         print(f"{self.item_name} added to order")
 
 
-
 class Burger(FoodItem):
 
-    condiment_list = []
     condiment_menu = ['ketchup', 'mustard', 'mayo', 'onion', 'tomato', 'lettuce']
     burger_menu = {'original': 5.99, 'cheeseburger': 6.99, 'double cheeseburger': 8.99}
 
-    def emptylist(self):
+    def __init__(self, item_name, number):
+        super().__init__(item_name, number)
         self.condiment_list = []
 
     def getlist(self):
@@ -61,7 +60,6 @@ def user_input_burger():
     burger = input("What kind of burger would you like original, cheeseburger or double cheeseburger: ").lower()
     number = input("How many would you like").lower()
     b = Burger(burger, number)
-    b.emptylist()
 
     updated_condiment = copy.deepcopy(b.condiment_menu)
     print(f'Please choose up to three condiments: ')
@@ -145,18 +143,4 @@ def take_order():
     for i in order.order_list:
         print(i.getlist())
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 take_order()
-
