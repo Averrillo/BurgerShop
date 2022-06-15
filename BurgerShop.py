@@ -1,4 +1,5 @@
 import copy
+import itertools
 
 CONDIMENTS = ['ketchup', 'mustard', 'mayo', 'onion', 'tomato', 'lettuce']
 BURGER_MENU = {'original': 5.99, 'cheeseburger': 6.99, 'double cheeseburger': 8.99}
@@ -14,6 +15,7 @@ class FoodItem:
 
     def get_price(self):
         return self.price
+
 
 class Burger(FoodItem):
 
@@ -73,31 +75,74 @@ class Combo(FoodItem):
 
 class Order:
     client_name = ""
-    order_list = []
-    total_cost = 0
+    burger_list = []
+    drink_list = []
+    side_list = []
+    combo_list = []
+    before_discount_cost = 0
+
 
     def __init__(self, client_name):
         self.client_name = client_name
 
-    def display(self):
-        for i in self.order_list:
+    def check_combo(self):
+        self.burger_list.sort(key=lambda x: x.get_price())
+        self.drink_list.sort(key=lambda x: x.get_price())
+        self.side_list.sort(key=lambda x: x.get_price())
+
+        # print(f"Burger objects: {self.burger_list}\n")
+        # print(f"Drink objects: {self.drink_list}\n")
+        # print(f"Side objects: {self.side_list}\n")
+        # print(f"Combo objects: {self.combo_list}\n")
+
+        burger_count = len(self.burger_list)
+        side_count = len(self.side_list)
+        drink_count = len(self.drink_list)
+        minimum = min(burger_count, side_count, drink_count)
+
+        if burger_count >= 1 and side_count >= 1 and drink_count:
+            for i in range(minimum):
+                c = Combo("Combo", self.burger_list[i], self.drink_list[i], self.side_list[i], 0)
+                self.burger_list.pop(i)
+                self.drink_list.pop(i)
+                self.side_list.pop(i)
+                self.combo_list.append(c)
+        else:
+            print("There is no combination of combos")
+
+        # print("After updating combo !!!!!\n")
+        # print(f"Burger objects: {self.burger_list}\n")
+        # print(f"Drink objects: {self.drink_list}\n")
+        # print(f"Side objects: {self.side_list}\n")
+        # print(f"Combo objects: {self.combo_list}\n")
+
+    def before_cost(self):
+        cost = 0
+        order_list = list(itertools.chain(self.burger_list, self.side_list, self.drink_list, self.combo_list))
+
+        for i in order_list:
             print(i.display())
 
-    def check_combo(self):
-        burger_count = 0
-        side_count = 0
-        drink_count = 0
+        for i in order_list:
+            cost += i.get_price()
 
-        for i in self.order_list:
-            if isinstance(i, Burger):
-                burger_count += 1
-            elif isinstance(i, Side):
-                side_count += 1
-            elif isinstance(i, Drink):
-                drink_count += 1
-            else:
-                print("There are not enough items to make a combo")
+        self.before_discount_cost = cost
+        print(f"The cost before discounted combos: {cost}")
 
+    def after_cost(self):
+        cost = 0
+        order_list = list(itertools.chain(self.burger_list, self.side_list, self.drink_list, self.combo_list))
+
+        for i in order_list:
+            print(i.display())
+
+        for i in order_list:
+            cost += i.get_price()
+
+        print(f"The cost before combo reduction: {self.before_discount_cost}$")
+        print(f"The cost after combo reduction: {cost}")
+        print(f"You saved: {self.before_discount_cost - cost}$")
+        print("Farewell have a wonderful day!")
 
 
 def user_input_burger():
@@ -126,8 +171,6 @@ def user_input_burger():
             b.condiment_list.append(condiment)
             updated_condiment.remove(condiment)
             count += 1
-
-    print(b.condiment_list)
 
     return b
 
@@ -202,24 +245,28 @@ def take_order():
         menu_num = input('1. Burgers\n2. Drinks\n3. Sides\n4. Combo\n5. Exit\n')
         if menu_num == '1':
             o = user_input_burger()
-            order.order_list.append(o)
+            order.burger_list.append(o)
 
         elif menu_num == '2':
             o = user_input_drink()
-            order.order_list.append(o)
+            order.drink_list.append(o)
 
         elif menu_num == '3':
             o = user_input_side()
-            order.order_list.append(o)
+            order.side_list.append(o)
 
         elif menu_num == '4':
             o = user_input_combo()
-            order.order_list.append(o)
+            order.combo_list.append(o)
 
         elif menu_num == '5':
+            print("=======================================\n")
+            print("Here is a summary of your order")
+            print(f"Order for: {order.client_name}\n")
+            order.before_cost()
             order.check_combo()
-            order.display()
-
+            order.after_cost()
+            print("=======================================")
             break
 
         else:
