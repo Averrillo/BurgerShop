@@ -40,7 +40,7 @@ class Burger(FoodItem):
         return self.condiment_list
 
     def display(self):
-        string = "Item: " + self.item_name + "\n" + "Item ID: " + str(self.item_id) + "\n" + "Price: " + str(self.price) + "$" + "\n" + "Condiments: " + ", ".join(self.condiment_list)
+        string = "Item: " + self.item_name + "\n" + "Item ID: " + str(self.item_id) + "\n" + "Price: " + str(self.price) + "$" + "\n" + "Condiments: " + ", ".join(self.condiment_list) + "\n"
         return string
 
 
@@ -53,7 +53,7 @@ class Drink(FoodItem):
         self.item_id = super().get_id()
 
     def display(self):
-        string = "Item: " + self.item_name + "\n" + "Item ID: "+ str(self.item_id) + "\n" + "Price: " + str(self.price) + "$" + "\n" + "Size: " + self.size
+        string = "Item: " + self.item_name + "\n" + "Item ID: "+ str(self.item_id) + "\n" + "Price: " + str(self.price) + "$" + "\n" + "Size: " + self.size + "\n"
         return string
 
 
@@ -65,7 +65,7 @@ class Side(FoodItem):
         self.item_id = super().get_id()
 
     def display(self):
-        string = "Item: " + self.item_name + "\n" + "Item ID: " + str(self.item_id) + "\n" + "Price: " + str(self.price) + "$"
+        string = "Item: " + self.item_name + "\n" + "Item ID: " + str(self.item_id) + "\n" + "Price: " + str(self.price) + "$" + "\n"
         return string
 
 
@@ -96,6 +96,7 @@ class Order:
     drink_list = []
     side_list = []
     combo_list = []
+    combo_detected = False
     before_discount_cost = 0
 
     def __init__(self, client_name):
@@ -112,14 +113,13 @@ class Order:
         minimum = min(burger_count, side_count, drink_count)
 
         if burger_count >= 1 and side_count >= 1 and drink_count >= 1:
+            self.combo_detected = True
             for i in range(minimum):
                 c = Combo("Combo", self.burger_list[i], self.drink_list[i], self.side_list[i], 0)
                 self.burger_list.pop(i)
                 self.drink_list.pop(i)
                 self.side_list.pop(i)
                 self.combo_list.append(c)
-        else:
-            print("There are no combos available")
 
     def before_cost(self):
         cost = 0
@@ -134,19 +134,25 @@ class Order:
         self.before_discount_cost = cost
 
     def after_cost(self):
-        cost = 0
-        order_list = list(itertools.chain(self.burger_list, self.side_list, self.drink_list, self.combo_list))
 
-        for i in order_list:
-            print(i.display())
+        if self.combo_detected:
+            print("Congratulations we can save you money by detecting a combo!!\n")
+            cost = 0
+            order_list = list(itertools.chain(self.burger_list, self.side_list, self.drink_list, self.combo_list))
 
-        for i in order_list:
-            cost += i.get_price()
+            for i in order_list:
+                print(i.display())
 
-        print(f"The cost before combo reduction: {self.before_discount_cost}$")
-        print(f"The cost after combo reduction: {cost}$")
-        print(f"You saved: {self.before_discount_cost - cost}$")
-        print("Farewell have a wonderful day!")
+            for i in order_list:
+                cost += i.get_price()
+
+            print(f"The cost before combo reduction: {self.before_discount_cost}$")
+            print(f"The cost after combo reduction: {cost}$")
+            print(f"You saved: {self.before_discount_cost - cost}$")
+            print("Farewell have a wonderful day!")
+        else:
+            print(f"Total Cost: {self.before_discount_cost}$")
+            print("Farewell have a wonderful day!")
 
     def remove_order(self):
         order_list = list(itertools.chain(self.burger_list, self.side_list, self.drink_list, self.combo_list))
@@ -217,7 +223,6 @@ def user_input_burger():
             b.condiment_list.append(condiment)
             updated_condiment.remove(condiment)
             count += 1
-            print("\n")
 
     return b
 
@@ -277,13 +282,37 @@ def user_input_combo():
 
 
 def take_order():
-    print("Welcome to the Krusty Krab, my name is Squidward how may I be of service or not.\n")
+
+    print("  _  __            _          _  __         _    ")
+    print(" | |/ /_ _ _  _ __| |_ _  _  | |/ /_ _ __ _| |__ ")
+    print(" | ' <| '_| || (_-<  _| || | | ' <| '_/ _` | '_ \\")
+    print(" |_|\_\_|  \_,_/__/\__|\_, | |_|\_\_| \__,_|_.__/")
+    print("                       |__/                      ")
+    print("Welcome to the Krusty Krab, my name is Squidward how may I be of service or not?\n")
+    print("        .--'''''''''--.")
+    print("     .'      .---.      '.")
+    print("    /    .-----------.    \\")
+    print("   /        .-----.        \\")
+    print("   |       .-.   .-.       |")
+    print("   |      /   \ /   \      |")
+    print("    \    | .-. | .-. |    /")
+    print("     '-._| | | | | | |_.-'")
+    print("         | '-' | '-' |")
+    print("          \___/ \___/")
+    print("      _.-'  /   \  `-._")
+    print("     .' _.--|     |--._ '.")
+    print("     ' _...-|     |-..._ '")
+    print("            |     |")
+    print("            '.___.'")
+    print("              | |")
+    print("             _| |_")
+    print("            /\( )/\\")
+    print("           /  ' '  \\")
     name = input("Can I get your name for the order: \n")
     order = Order(name)
-    print(f'Hello {order.client_name} choose a menu you would like to order from.\n')
 
     while True:
-
+        print(f'Hello {order.client_name} choose a menu you would like to order from.\n')
         menu_num = input('1. Burgers\n2. Drinks\n3. Sides\n4. Combo\n5. Remove Order\n6. Exit\n')
         if menu_num == '1':
             o = user_input_burger()
